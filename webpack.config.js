@@ -3,7 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 module.exports = (env) => {
 
+    const isDev = env.mode === 'development'; // проверка на дев мод
+
     return {    
+
         mode: env.mode ?? 'development', //задает мод сборка или разработка
 
         entry: path.resolve(__dirname, 'src', 'index.js'), //путь до входного файла
@@ -17,8 +20,16 @@ module.exports = (env) => {
         },
 
         plugins: [
-            new webpack.ProgressPlugin(),
+            new webpack.ProgressPlugin(), //плагин показывает прогресс сборки (не рекомендуется ипользовать)
             new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),
-        ]
+            //плагин подгружает html в build
+        ],
+
+        devtool: isDev && 'inline-source-map', //соурс мап для отслеживания ошибок
+
+        devServer: isDev ? { // пересобирает проект при изменениях
+            port: env.port ?? 3000,
+            open: true,
+        } : undefined,
     }
 }

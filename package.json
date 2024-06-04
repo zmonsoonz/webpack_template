@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --env mode=development",
-    "build": "webpack --env mode=production"
+    "build": "webpack --env mode=production",
+    "start": "webpack serve --env mode=development"
   },
   "author": "Danila",
   "license": "MIT",
