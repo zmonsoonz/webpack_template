@@ -13,7 +13,7 @@ module.exports = (env) => {
 
         mode: env.mode ?? 'development', //задает мод сборка или разработка
 
-        entry: ["@babel/polyfill", path.resolve(__dirname, 'src', 'index.js')], //путь до входного файла, добавляет бабель
+        entry: path.resolve(__dirname, 'src', 'js', 'index.js'), //путь до входного файла, добавляет бабель
 
         output: {
             filename: '[name].[contenthash].js', //название выходного файла (name - берет имя входного файла, 
@@ -61,26 +61,29 @@ module.exports = (env) => {
                 },
 
                 {
-                    test: /\.(jpe?g|png|gif|webp|svg)$/i,
+                    test: /\.(jpe?g|png|gif|webp|svg)$/i, // подгрузка минимизированных картинок в сборку
                     use: [
                         {
                             loader: 'image-webpack-loader',
+
                             options: {
                                 mozjpeg: {
                                 progressive: true,
                                 },
-                                // optipng.enabled: false will disable optipng
+
                                 optipng: {
                                 enabled: false,
                                 },
+
                                 pngquant: {
                                 quality: [0.65, 0.90],
                                 speed: 4
                                 },
+
                                 gifsicle: {
                                 interlaced: false,
                                 },
-                                // the webp option will enable WEBP
+                                
                                 webp: {
                                 quality: 75
                                 }
@@ -107,7 +110,7 @@ module.exports = (env) => {
 
         plugins: [
             new webpack.ProgressPlugin(), //плагин показывает прогресс сборки (не рекомендуется ипользовать)
-            new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),
+            new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html') }),
             //плагин подгружает html в build
             !isDev && new MiniCssExtractPlugin() //добавляет css файлы в сборку
         ],
