@@ -1,3 +1,4 @@
+//импортим все нужные плагины
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -12,7 +13,7 @@ module.exports = (env) => {
 
         mode: env.mode ?? 'development', //задает мод сборка или разработка
 
-        entry: ["@babel/polyfill", path.resolve(__dirname, 'src', 'index.js')], //путь до входного файла
+        entry: ["@babel/polyfill", path.resolve(__dirname, 'src', 'index.js')], //путь до входного файла, добавляет бабель
 
         output: {
             filename: '[name].[contenthash].js', //название выходного файла (name - берет имя входного файла, 
@@ -27,18 +28,18 @@ module.exports = (env) => {
                 
                 {
                     test: /\.html$/i,
-                    loader: "html-loader",
-                },
+                    loader: "html-loader", // добавляем html loader чтобы заимпортить в js
+                }, 
 
                 {
-                    test: /\.(c|sa|sc)ss$/i,
+                    test: /\.(c|sa|sc)ss$/i, // выбираем все файлы css, scss, sass
                     use: [
                       // Creates `style` nodes from JS strings
                       isDev ? "style-loader" : MiniCssExtractPlugin.loader, // в дев сборке используем обычный style loader
                       // Translates CSS into CommonJS
                       "css-loader",
                       {
-                        loader: "postcss-loader",
+                        loader: "postcss-loader", // добавляем post-css для добавления вендорных префиксов
                         options: {
                             postcssOptions: {
                                 plugins: [require('postcss-preset-env')]
@@ -51,7 +52,15 @@ module.exports = (env) => {
                 },
 
                 {
-                    test: /\.(?:js|mjs|cjs)$/,
+                    test: /\.woff2?$/i, //подгрузка шрифтов в сборку
+                    type: "asset/resource",
+                    generator: {
+                        filename: 'fonts/[name][ext]'
+                    }
+                },
+
+                {
+                    test: /\.(?:js|mjs|cjs)$/, //добавляем бабель для поддержки js во всех браузерах
                     exclude: /node_modules/,
                     use: {
                       loader: 'babel-loader',
