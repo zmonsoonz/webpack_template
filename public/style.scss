@@ -1,4 +1,10 @@
 h1 {
     color: blue;
-    user-select: none;
+    user-select: none; // для проверки post-css
+}
+main {
+    width: 500px;
+    height: 500px;
+    background-size: cover;
+    background-image: url(./img/menu-img.png); // картинка для проверки работы image-loader'a
 }

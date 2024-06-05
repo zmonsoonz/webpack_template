@@ -20,6 +20,7 @@ module.exports = (env) => {
                                                 //contenthash - добавляет в название хэш содержимого, 
                                                 //чтобы не менять файл, если внутри ничего не поменялось)
             path: path.resolve(__dirname, 'build'), //путь до выходного файла
+            assetModuleFilename: "assets/[hash][ext]",
             clean: true //чистит директорию от лишних файлов
         },
 
@@ -57,6 +58,36 @@ module.exports = (env) => {
                     generator: {
                         filename: 'fonts/[name][ext]'
                     }
+                },
+
+                {
+                    test: /\.(jpe?g|png|gif|webp|svg)$/i,
+                    use: [
+                        {
+                            loader: 'image-webpack-loader',
+                            options: {
+                                mozjpeg: {
+                                progressive: true,
+                                },
+                                // optipng.enabled: false will disable optipng
+                                optipng: {
+                                enabled: false,
+                                },
+                                pngquant: {
+                                quality: [0.65, 0.90],
+                                speed: 4
+                                },
+                                gifsicle: {
+                                interlaced: false,
+                                },
+                                // the webp option will enable WEBP
+                                webp: {
+                                quality: 75
+                                }
+                            }
+                        }
+                    ],
+                    type: "asset/resource"
                 },
 
                 {
